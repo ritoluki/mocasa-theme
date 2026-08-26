@@ -1,0 +1,139 @@
+{%- comment -%}
+  SIZE CHART MODAL — SIMPLE IMAGE VERSION
+  ---------------------------------------------------------
+  This version shows YOUR OWN uploaded size chart image —
+  no coded table, no coded diagram. Much simpler to edit.
+
+  HOW TO ADD A NEW PRODUCT TYPE
+  1. Upload your size chart image to: Content → Files
+  2. Copy its URL (right-click the image → Copy image address)
+  3. Copy one {%- when '...' -%} block below and edit:
+       - the tag keyword (e.g. 'pants' for tag sizechart-pants)
+       - scm_title (used for alt text only)
+       - scm_image_url (paste your image URL between the quotes)
+  4. Tag the matching product in Shopify Admin with:
+       sizechart-<your-keyword>
+
+  INSTALL
+  Paste this whole file into Snippets → size-chart-modal.liquid
+  Then on the product template (Custom Liquid block) add:
+    {% render 'size-chart-modal', product: product %}
+{%- endcomment -%}
+
+{%- assign scm_accent_color = '#7A8A5C' -%}
+
+{%- assign scm_chart_type = '' -%}
+{%- for tag in product.tags -%}
+  {%- if tag contains 'sizechart-' -%}
+    {%- assign scm_chart_type = tag | remove: 'sizechart-' -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- assign scm_title = '' -%}
+{%- assign scm_image_url = '' -%}
+
+{%- case scm_chart_type -%}
+
+  {%- when 'hawaiian-shirt' -%}
+    {%- assign scm_title = 'Hawaiian Shirt' -%}
+    {%- assign scm_image_url = 'https://cdn.shopify.com/s/files/1/0765/4375/4407/files/hawain_shirt_size.jpg?v=1787470654' -%}
+
+  {%- when 'Size Chart' -%}
+    {%- assign scm_title = 'Size Chart' -%}
+    {%- assign scm_image_url = 'https://cdn.shopify.com/s/files/1/0765/4375/4407/files/hoodie_size.jpg?v=1787470653' -%}
+
+  {%- when 'Men Polo Size Chart' -%}
+    {%- assign scm_title = 'T-Shirt' -%}
+    {%- assign scm_image_url = 'https://cdn.shopify.com/s/files/1/0765/4375/4407/files/polo_pod_size.jpg?v=1787470654' -%}
+
+  {%- when 'hoodie' -%}
+    {%- assign scm_title = 'Hoodie' -%}
+    {%- assign scm_image_url = '' -%}
+
+  {%- comment -%}
+    ============ ADD MORE TYPES HERE ============
+    {%- when 'your-keyword' -%}
+      {%- assign scm_title = 'Your Title' -%}
+      {%- assign scm_image_url = 'https://cdn.shopify.com/...' -%}
+  {%- endcomment -%}
+
+{%- endcase -%}
+
+{%- if scm_image_url != '' -%}
+
+  <a href="#" id="scm-trigger-{{ scm_chart_type }}" class="scm-trigger-link" aria-haspopup="dialog">
+    Size Guide
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+
+  <div id="scm-overlay-{{ scm_chart_type }}" class="scm-overlay" hidden>
+    <div class="scm-modal" role="dialog" aria-modal="true" aria-label="{{ scm_title }} Size Chart">
+      <button type="button" class="scm-close" data-scm-close aria-label="Close size chart">&times;</button>
+      <img src="{{ scm_image_url }}" alt="{{ scm_title }} Size Chart" class="scm-full-image">
+    </div>
+  </div>
+
+{%- endif -%}
+
+<style>
+  .scm-trigger-link { display:inline-flex; align-items:center; gap:4px; font-size:14px; font-weight:600; text-decoration:underline; color:{{ scm_accent_color }}; cursor:pointer; white-space:nowrap; }
+  .scm-overlay { position:fixed; inset:0; background:rgba(20,20,20,0.55); display:flex; align-items:flex-start; justify-content:center; padding:40px 16px; overflow-y:auto; z-index:2147483647; }
+  .scm-overlay[hidden] { display:none; }
+  .scm-modal { position:relative; background:#fff; width:100%; max-width:820px; border-radius:12px; padding:16px; box-shadow:0 24px 60px rgba(0,0,0,0.3); }
+  .scm-close { position:absolute; top:-14px; right:-14px; width:32px; height:32px; border-radius:50%; background:#fff; border:none; font-size:22px; line-height:1; color:#333; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.25); z-index:2; }
+  .scm-close:hover { color:#000; }
+  .scm-full-image { display:block; width:100%; height:auto; border-radius:6px; }
+  @media (max-width:600px){ .scm-modal{padding:10px;} .scm-close{top:-10px; right:-10px; width:28px; height:28px; font-size:18px;} }
+</style>
+
+<script>
+  (function () {
+    var trigger = document.getElementById('scm-trigger-{{ scm_chart_type }}');
+    var overlay = document.getElementById('scm-overlay-{{ scm_chart_type }}');
+    if (!trigger || !overlay) return;
+
+    if (overlay.parentElement !== document.body) {
+      document.body.appendChild(overlay);
+    }
+
+    var closeBtn = overlay.querySelector('[data-scm-close]');
+
+    function openModal(e) { if (e) e.preventDefault(); overlay.hidden = false; document.body.style.overflow = 'hidden'; }
+    function closeModal() { overlay.hidden = true; document.body.style.overflow = ''; }
+
+    trigger.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !overlay.hidden) closeModal(); });
+
+    function attachNextToSizeLabel() {
+      var labelTexts = ['size', 'kích thước', 'kich thuoc'];
+      var candidates = document.querySelectorAll('legend, label, h3, h4, span, dt, div, p');
+      for (var i = 0; i < candidates.length; i++) {
+        var el = candidates[i];
+        if (el.children.length > 0) continue;
+        if (el.closest('#scm-overlay-{{ scm_chart_type }}')) continue;
+        var text = el.textContent.trim().toLowerCase();
+        if (labelTexts.indexOf(text) !== -1) {
+          el.style.display = 'flex';
+          el.style.alignItems = 'center';
+          el.style.justifyContent = 'space-between';
+          el.style.gap = '12px';
+          el.style.width = '100%';
+          el.appendChild(trigger);
+          return true;
+        }
+      }
+      return false;
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', attachNextToSizeLabel);
+    } else {
+      attachNextToSizeLabel();
+    }
+  })();
+</script>

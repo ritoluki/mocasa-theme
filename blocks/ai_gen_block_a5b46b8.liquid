@@ -1,0 +1,884 @@
+{% doc %}
+
+  @prompt
+
+    tạo 1 phần header menu mega menu cố định căn giữa, có thanh cuộn chống tràn và đè lên mọi hình ảnh bên dưới bằng z-index tối đa
+
+{% enddoc %}
+
+
+
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+
+
+{% style %}
+
+/* =========================================================
+
+   ÉP KHUNG SHOPIFY SECTION VÀ HEADER LÊN LỚP CAO NHẤT TUYỆT ĐỐI
+
+========================================================= */
+
+.shopify-section:has(.ai-menu-{{ ai_gen_id }}) {
+
+  position: relative;
+
+  z-index: 2147483647; /* Giá trị z-index tối đa trong CSS để đè mọi section bên dưới */
+
+}
+
+
+
+.ai-menu-{{ ai_gen_id }} {
+
+  display: block;
+
+  width: 100%;
+
+  background-color: {{ block.settings.background_color }};
+
+  border-bottom: {{ block.settings.border_width }}px solid {{ block.settings.border_color }};
+
+  position: relative;
+
+  z-index: 2147483647;
+
+}
+
+
+
+.ai-menu-container-{{ ai_gen_id }} {
+
+  max-width: 1400px;
+
+  margin: 0 auto;
+
+  padding: {{ block.settings.padding_vertical }}px {{ block.settings.padding_horizontal }}px;
+
+  position: relative;
+
+}
+
+
+
+.ai-menu-nav-{{ ai_gen_id }} {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: {{ block.settings.nav_alignment }};
+
+  gap: {{ block.settings.nav_spacing }}px;
+
+  flex-wrap: wrap;
+
+}
+
+
+
+/* =========================================================
+
+   MENU ITEM & LINK
+
+========================================================= */
+
+.ai-menu-item-{{ ai_gen_id }} {
+
+  position: static;
+
+  display: block;
+
+}
+
+
+
+.ai-menu-link-{{ ai_gen_id }} {
+
+  position: relative;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  text-decoration: none;
+
+  white-space: nowrap;
+
+  color: {{ block.settings.text_color }};
+
+  font-size: {{ block.settings.nav_font_size }}px;
+
+  padding: {{ block.settings.link_padding_vertical }}px {{ block.settings.link_padding_horizontal }}px;
+
+  background-color: transparent !important;
+
+  transition: color 0.2s ease;
+
+}
+
+
+
+.ai-menu-link-{{ ai_gen_id }}:hover {
+
+  color: {{ block.settings.text_hover_color }};
+
+  background-color: transparent !important;
+
+}
+
+
+
+.ai-menu-link-{{ ai_gen_id }}.active {
+
+  color: {{ block.settings.active_text_color }};
+
+  background-color: transparent !important;
+
+}
+
+
+
+/* =========================================================
+
+   MEGA MENU DROPDOWN (ĐÈ TUYỆT ĐỐI LÊN MỌI HÌNH ẢNH)
+
+========================================================= */
+
+.ai-menu-dropdown-{{ ai_gen_id }} {
+
+  position: absolute;
+
+  top: 100%;
+
+  left: 50%;
+
+  transform: translateX(-50%) translateY(10px);
+
+  width: 1200px;
+
+  max-width: 95vw;
+
+  max-height: 70vh; /* Giới hạn chiều cao chống tràn màn hình */
+
+  overflow-y: auto;  /* Tự động bật thanh cuộn khi danh sách quá dài */
+
+  background-color: {{ block.settings.background_color }};
+
+  border: 1px solid {{ block.settings.border_color }};
+
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25); /* Tăng bóng đổ mạnh để tách biệt hoàn toàn với ảnh nền */
+
+  border-radius: 8px;
+
+  z-index: 2147483647;
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+
+  pointer-events: none;
+
+  padding: 35px;
+
+  box-sizing: border-box;
+
+}
+
+
+
+/* Tùy chỉnh thanh cuộn gọn gàng */
+
+.ai-menu-dropdown-{{ ai_gen_id }}::-webkit-scrollbar {
+
+  width: 6px;
+
+}
+
+.ai-menu-dropdown-{{ ai_gen_id }}::-webkit-scrollbar-track {
+
+  background: #f1f1f1;
+
+  border-radius: 4px;
+
+}
+
+.ai-menu-dropdown-{{ ai_gen_id }}::-webkit-scrollbar-thumb {
+
+  background: #ccc;
+
+  border-radius: 4px;
+
+}
+
+.ai-menu-dropdown-{{ ai_gen_id }}::-webkit-scrollbar-thumb:hover {
+
+  background: #999;
+
+}
+
+
+
+/* Vùng đệm kết nối chống mất hover */
+
+.ai-menu-dropdown-{{ ai_gen_id }}::before {
+
+  content: "";
+
+  position: absolute;
+
+  top: -20px;
+
+  left: 0;
+
+  width: 100%;
+
+  height: 20px;
+
+}
+
+
+
+/* Grid tự động co giãn cột */
+
+.ai-mega-grid-{{ ai_gen_id }} {
+
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+  gap: 30px;
+
+}
+
+
+
+/* Cấp 2: Tiêu đề cột */
+
+.ai-mega-title-{{ ai_gen_id }} {
+
+  display: block;
+
+  font-weight: 700;
+
+  font-size: {{ block.settings.nav_font_size }}px;
+
+  color: {{ block.settings.text_color }};
+
+  margin-bottom: 14px;
+
+  padding-bottom: 8px;
+
+  border-bottom: 1px solid {{ block.settings.border_color }};
+
+  text-decoration: none;
+
+  background-color: transparent !important;
+
+  transition: color 0.2s ease;
+
+}
+
+.ai-mega-title-{{ ai_gen_id }}:hover {
+
+  color: {{ block.settings.text_hover_color }};
+
+}
+
+
+
+/* Cấp 3: Danh sách link con trong cột */
+
+.ai-mega-sublist-{{ ai_gen_id }} {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+}
+
+
+
+.ai-mega-link-{{ ai_gen_id }} {
+
+  display: block;
+
+  color: {{ block.settings.text_color }};
+
+  text-decoration: none;
+
+  font-size: {{ block.settings.nav_font_size | minus: 1 }}px;
+
+  background-color: transparent !important;
+
+  transition: color 0.2s ease;
+
+  opacity: 0.85;
+
+}
+
+
+
+.ai-mega-link-{{ ai_gen_id }}:hover {
+
+  color: {{ block.settings.text_hover_color }} !important;
+
+  opacity: 1;
+
+  transform: translateX(3px);
+
+}
+
+
+
+/* Hiển thị Dropdown mượt mà thông qua Class được điều khiển bởi JS */
+
+.ai-menu-dropdown-{{ ai_gen_id }}.ai-dropdown-active-{{ ai_gen_id }} {
+
+  opacity: 1;
+
+  visibility: visible;
+
+  transform: translateX(-50%) translateY(0);
+
+  pointer-events: auto;
+
+}
+
+
+
+/* =========================================================
+
+   MOBILE RESPONSIVE
+
+========================================================= */
+
+@media screen and (max-width: 749px) {
+
+  .ai-menu-nav-{{ ai_gen_id }} {
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+  }
+
+  .ai-menu-dropdown-{{ ai_gen_id }} {
+
+    position: static;
+
+    width: 100%;
+
+    max-height: none;
+
+    transform: none;
+
+    box-shadow: none;
+
+    padding: 15px;
+
+    display: none;
+
+  }
+
+  .ai-menu-dropdown-{{ ai_gen_id }}.ai-dropdown-active-{{ ai_gen_id }} {
+
+    display: block;
+
+    transform: none;
+
+  }
+
+  .ai-mega-grid-{{ ai_gen_id }} {
+
+    grid-template-columns: 1fr;
+
+    gap: 20px;
+
+  }
+
+}
+
+{% endstyle %}
+
+
+
+<nav class="ai-menu-{{ ai_gen_id }}" {{ block.shopify_attributes }} aria-label="Main navigation">
+
+  <div class="ai-menu-container-{{ ai_gen_id }}">
+
+    <div class="ai-menu-nav-{{ ai_gen_id }}">
+
+      {% if block.settings.menu != blank %}
+
+        {% for link in block.settings.menu.links %}
+
+          <div class="ai-menu-item-{{ ai_gen_id }}">
+
+           
+
+            <!-- Cấp 1 -->
+
+            <a href="{{ link.url }}" class="ai-menu-link-{{ ai_gen_id }}" {% if link.links != blank %}aria-haspopup="true"{% endif %}>
+
+              {{ link.title }}
+
+              {% if link.links != blank %}
+
+                <span class="ai-menu-arrow-{{ ai_gen_id }}" aria-hidden="true"></span>
+
+              {% endif %}
+
+            </a>
+
+
+
+            <!-- Cấp 2 và Cấp 3 (Mega Menu) -->
+
+            {% if link.links != blank %}
+
+              <div class="ai-menu-dropdown-{{ ai_gen_id }}">
+
+                <div class="ai-mega-grid-{{ ai_gen_id }}">
+
+                  {% for child_link in link.links %}
+
+                    <div class="ai-mega-column-{{ ai_gen_id }}">
+
+                     
+
+                      <!-- Tiêu đề cột (Cấp 2) -->
+
+                      <a href="{{ child_link.url }}" class="ai-mega-title-{{ ai_gen_id }}">
+
+                        {{ child_link.title }}
+
+                      </a>
+
+
+
+                      <!-- Danh sách con (Cấp 3) -->
+
+                      {% if child_link.links != blank %}
+
+                        <div class="ai-mega-sublist-{{ ai_gen_id }}">
+
+                          {% for grandchild_link in child_link.links %}
+
+                            <a href="{{ grandchild_link.url }}" class="ai-mega-link-{{ ai_gen_id }}">
+
+                              {{ grandchild_link.title }}
+
+                            </a>
+
+                          {% endfor %}
+
+                        </div>
+
+                      {% endif %}
+
+
+
+                    </div>
+
+                  {% endfor %}
+
+                </div>
+
+              </div>
+
+            {% endif %}
+
+
+
+          </div>
+
+        {% endfor %}
+
+      {% endif %}
+
+    </div>
+
+  </div>
+
+</nav>
+
+
+
+<script>
+
+  (function() {
+
+    const menu = document.querySelector('.ai-menu-{{ ai_gen_id }}');
+
+    if (!menu) return;
+
+
+
+    // Active link hiện tại theo URL
+
+    const currentPath = window.location.pathname;
+
+    const links = menu.querySelectorAll('.ai-menu-link-{{ ai_gen_id }}');
+
+    links.forEach(function(link) {
+
+      const href = link.getAttribute('href');
+
+      if (!href) return;
+
+      try {
+
+        const linkUrl = new URL(href, window.location.origin);
+
+        if (linkUrl.pathname === currentPath) {
+
+          link.classList.add('active');
+
+        }
+
+      } catch (error) {}
+
+    });
+
+
+
+    // Xử lý giữ hover mượt mà cho Mega Menu chống mất mục con
+
+    const menuItems = menu.querySelectorAll('.ai-menu-item-{{ ai_gen_id }}');
+
+    menuItems.forEach(item => {
+
+      const dropdown = item.querySelector('.ai-menu-dropdown-{{ ai_gen_id }}');
+
+      if (!dropdown) return;
+
+
+
+      let timeout;
+
+
+
+      const showDropdown = () => {
+
+        clearTimeout(timeout);
+
+        document.querySelectorAll('.ai-menu-dropdown-{{ ai_gen_id }}').forEach(d => {
+
+          if (d !== dropdown) d.classList.remove('ai-dropdown-active-{{ ai_gen_id }}');
+
+        });
+
+        dropdown.classList.add('ai-dropdown-active-{{ ai_gen_id }}');
+
+      };
+
+
+
+      const hideDropdown = () => {
+
+        timeout = setTimeout(() => {
+
+          dropdown.classList.remove('ai-dropdown-active-{{ ai_gen_id }}');
+
+        }, 200);
+
+      };
+
+
+
+      item.addEventListener('mouseenter', showDropdown);
+
+      item.addEventListener('mouseleave', hideDropdown);
+
+      dropdown.addEventListener('mouseenter', () => clearTimeout(timeout));
+
+      dropdown.addEventListener('mouseleave', hideDropdown);
+
+    });
+
+  })();
+
+</script>
+
+
+
+{% schema %}
+
+{
+
+  "name": "Navigation menu",
+
+  "settings": [
+
+    {
+
+      "type": "link_list",
+
+      "id": "menu",
+
+      "label": "Menu",
+
+      "default": "main-menu"
+
+    },
+
+    {
+
+      "type": "select",
+
+      "id": "nav_alignment",
+
+      "label": "Alignment",
+
+      "options": [
+
+        { "value": "flex-start", "label": "Left" },
+
+        { "value": "center", "label": "Center" },
+
+        { "value": "flex-end", "label": "Right" },
+
+        { "value": "space-between", "label": "Space between" }
+
+      ],
+
+      "default": "center"
+
+    },
+
+    {
+
+      "type": "range",
+
+      "id": "nav_font_size",
+
+      "label": "Font size",
+
+      "min": 12,
+
+      "max": 24,
+
+      "step": 1,
+
+      "unit": "px",
+
+      "default": 16
+
+    },
+
+    {
+
+      "type": "range",
+
+      "id": "nav_spacing",
+
+      "label": "Link spacing",
+
+      "min": 5,
+
+      "max": 50,
+
+      "step": 5,
+
+      "unit": "px",
+
+      "default": 20
+
+    },
+
+    {
+
+      "type": "range",
+
+      "id": "link_padding_vertical",
+
+      "label": "Link vertical padding",
+
+      "min": 0,
+
+      "max": 20,
+
+      "step": 2,
+
+      "default": 8
+
+    },
+
+    {
+
+      "type": "range",
+
+      "id": "link_padding_horizontal",
+
+      "label": "Link horizontal padding",
+
+      "min": 0,
+
+      "max": 30,
+
+      "step": 2,
+
+      "default": 12
+
+    },
+
+    {
+
+      "type": "header",
+
+      "content": "Colors"
+
+    },
+
+    {
+
+      "type": "color",
+
+      "id": "background_color",
+
+      "label": "Background color",
+
+      "default": "#ffffff"
+
+    },
+
+    {
+
+      "type": "color",
+
+      "id": "text_color",
+
+      "label": "Text color",
+
+      "default": "#000000"
+
+    },
+
+    {
+
+      "type": "color",
+
+      "id": "text_hover_color",
+
+      "label": "Text hover color",
+
+      "default": "#ff4d4f"
+
+    },
+
+    {
+
+      "type": "color",
+
+      "id": "active_text_color",
+
+      "label": "Active text color",
+
+      "default": "#ff4d4f"
+
+    },
+
+    {
+
+      "type": "color",
+
+      "id": "border_color",
+
+      "label": "Border color",
+
+      "default": "#e0e0e0"
+
+    },
+
+    {
+
+      "type": "range",
+
+      "id": "border_width",
+
+      "label": "Border width",
+
+      "min": 0,
+
+      "max": 5,
+
+      "step": 1,
+
+      "unit": "px",
+
+      "default": 1
+
+    },
+
+    {
+
+      "type": "header",
+
+      "content": "Spacing"
+
+    },
+
+    {
+
+      "type": "range",
+
+      "id": "padding_vertical",
+
+      "label": "Vertical padding",
+
+      "min": 10,
+
+      "max": 50,
+
+      "step": 5,
+
+      "unit": "px",
+
+      "default": 15
+
+    },
+
+    {
+
+      "type": "range",
+
+      "id": "padding_horizontal",
+
+      "label": "Horizontal padding",
+
+      "min": 10,
+
+      "max": 50,
+
+      "step": 5,
+
+      "unit": "px",
+
+      "default": 20
+
+    }
+
+  ],
+
+  "presets": [
+
+    {
+
+      "name": "Navigation menu"
+
+    }
+
+  ]
+
+}
+
+{% endschema %} 
+

@@ -1,0 +1,575 @@
+{% doc %}
+  @prompt
+    Tôi muốn tạo 1 phần đề xuất những sản phẩm tương tự
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-related-products-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: {{ block.settings.section_padding }}px 0;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-related-products__container-{{ ai_gen_id }} {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .ai-related-products__header-{{ ai_gen_id }} {
+    text-align: {{ block.settings.heading_alignment }};
+    margin-bottom: {{ block.settings.heading_spacing }}px;
+  }
+
+  .ai-related-products__title-{{ ai_gen_id }} {
+    margin: 0;
+    color: {{ block.settings.heading_color }};
+    font-size: {{ block.settings.heading_size }}px;
+  }
+
+  .ai-related-products__grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.products_per_row_desktop }}, 1fr);
+    gap: {{ block.settings.grid_gap }}px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ai-related-products__item-{{ ai_gen_id }} {
+    position: relative;
+  }
+
+  .ai-related-products__card-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+    border-radius: {{ block.settings.card_border_radius }}px;
+    overflow: hidden;
+    background-color: {{ block.settings.card_background }};
+    border: {{ block.settings.card_border_width }}px solid {{ block.settings.card_border_color }};
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .ai-related-products__card-{{ ai_gen_id }}:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  .ai-related-products__image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    overflow: hidden;
+    background-color: #f5f5f5;
+  }
+
+  .ai-related-products__image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-related-products__image-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-related-products__image-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-related-products__badge-{{ ai_gen_id }} {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: {{ block.settings.badge_background }};
+    color: {{ block.settings.badge_text_color }};
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 1;
+  }
+
+  .ai-related-products__info-{{ ai_gen_id }} {
+    padding: {{ block.settings.card_padding }}px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+  }
+
+  .ai-related-products__product-title-{{ ai_gen_id }} {
+    margin: 0;
+    font-size: {{ block.settings.product_title_size }}px;
+    color: {{ block.settings.product_title_color }};
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .ai-related-products__price-wrapper-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .ai-related-products__price-{{ ai_gen_id }} {
+    font-size: {{ block.settings.price_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.price_color }};
+  }
+
+  .ai-related-products__compare-price-{{ ai_gen_id }} {
+    font-size: {{ block.settings.price_size | minus: 2 }}px;
+    color: {{ block.settings.compare_price_color }};
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+
+  .ai-related-products__empty-{{ ai_gen_id }} {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+    font-style: italic;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-related-products__grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.products_per_row_tablet }}, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-related-products__grid-{{ ai_gen_id }} {
+      {% if block.settings.products_per_row_mobile == '1' %}
+        grid-template-columns: 1fr;
+      {% else %}
+        grid-template-columns: repeat(2, 1fr);
+      {% endif %}
+      gap: {{ block.settings.grid_gap | times: 0.75 }}px;
+    }
+
+    .ai-related-products__title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.75 }}px;
+    }
+
+    .ai-related-products__info-{{ ai_gen_id }} {
+      padding: {{ block.settings.card_padding | times: 0.75 }}px;
+    }
+  }
+{% endstyle %}
+
+<related-products-{{ ai_gen_id }}
+  class="ai-related-products-{{ ai_gen_id }}"
+  data-product-id="{{ product.id }}"
+  data-limit="{{ block.settings.products_to_show }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-related-products__container-{{ ai_gen_id }}">
+    {% if block.settings.heading != blank %}
+      <div class="ai-related-products__header-{{ ai_gen_id }}">
+        <h2 class="ai-related-products__title-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+      </div>
+    {% endif %}
+
+    <ul class="ai-related-products__grid-{{ ai_gen_id }}">
+      {% if product.collections.first %}
+        {% assign related_products = product.collections.first.products | where_not: 'id', product.id %}
+        {% assign products_count = 0 %}
+        
+        {% for related_product in related_products limit: block.settings.products_to_show %}
+          {% assign products_count = products_count | plus: 1 %}
+          <li class="ai-related-products__item-{{ ai_gen_id }}">
+            <a href="{{ related_product.url }}" class="ai-related-products__card-{{ ai_gen_id }}">
+              <div class="ai-related-products__image-wrapper-{{ ai_gen_id }}">
+                {% if related_product.featured_image %}
+                  <img
+                    src="{{ related_product.featured_image | image_url: width: 600 }}"
+                    alt="{{ related_product.featured_image.alt | escape }}"
+                    class="ai-related-products__image-{{ ai_gen_id }}"
+                    loading="lazy"
+                    width="600"
+                    height="600"
+                  >
+                {% else %}
+                  <div class="ai-related-products__image-placeholder-{{ ai_gen_id }}">
+                    {{ 'product-1' | placeholder_svg_tag }}
+                  </div>
+                {% endif %}
+
+                {% if block.settings.show_sale_badge and related_product.compare_at_price > related_product.price %}
+                  <span class="ai-related-products__badge-{{ ai_gen_id }}">
+                    {{ block.settings.sale_badge_text }}
+                  </span>
+                {% endif %}
+              </div>
+
+              <div class="ai-related-products__info-{{ ai_gen_id }}">
+                <h3 class="ai-related-products__product-title-{{ ai_gen_id }}">
+                  {{ related_product.title }}
+                </h3>
+
+                {% if block.settings.show_price %}
+                  <div class="ai-related-products__price-wrapper-{{ ai_gen_id }}">
+                    <span class="ai-related-products__price-{{ ai_gen_id }}">
+                      {{ related_product.price | money }}
+                    </span>
+                    {% if related_product.compare_at_price > related_product.price %}
+                      <span class="ai-related-products__compare-price-{{ ai_gen_id }}">
+                        {{ related_product.compare_at_price | money }}
+                      </span>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              </div>
+            </a>
+          </li>
+        {% endfor %}
+
+        {% if products_count == 0 %}
+          <li class="ai-related-products__empty-{{ ai_gen_id }}" style="grid-column: 1 / -1;">
+            {{ block.settings.empty_message }}
+          </li>
+        {% endif %}
+      {% else %}
+        <li class="ai-related-products__empty-{{ ai_gen_id }}" style="grid-column: 1 / -1;">
+          {{ block.settings.empty_message }}
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+</related-products-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class RelatedProducts{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.init();
+      }
+
+      init() {
+        const productId = this.dataset.productId;
+        const limit = parseInt(this.dataset.limit);
+        
+        if (!productId) return;
+      }
+    }
+
+    customElements.define('related-products-{{ ai_gen_id }}', RelatedProducts{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sản phẩm tương tự",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Nội dung"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Tiêu đề",
+      "default": "Sản phẩm tương tự"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Căn chỉnh tiêu đề",
+      "options": [
+        {
+          "value": "left",
+          "label": "Trái"
+        },
+        {
+          "value": "center",
+          "label": "Giữa"
+        },
+        {
+          "value": "right",
+          "label": "Phải"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Số sản phẩm hiển thị",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "inline_richtext",
+      "id": "empty_message",
+      "label": "Thông báo khi không có sản phẩm",
+      "default": "Không có sản phẩm tương tự"
+    },
+    {
+      "type": "header",
+      "content": "Bố cục"
+    },
+    {
+      "type": "range",
+      "id": "products_per_row_desktop",
+      "label": "Sản phẩm mỗi hàng (Desktop)",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "products_per_row_tablet",
+      "label": "Sản phẩm mỗi hàng (Tablet)",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "products_per_row_mobile",
+      "label": "Sản phẩm mỗi hàng (Mobile)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Khoảng cách giữa sản phẩm",
+      "min": 8,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Độ rộng Desktop",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Khoảng cách trên/dưới",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Màu sắc"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Màu nền",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Màu tiêu đề",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Màu nền thẻ sản phẩm",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Màu viền thẻ",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "color",
+      "id": "product_title_color",
+      "label": "Màu tên sản phẩm",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Màu giá",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "compare_price_color",
+      "label": "Màu giá gốc",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Kiểu dáng thẻ sản phẩm"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Bo góc thẻ",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "card_border_width",
+      "label": "Độ dày viền",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "label": "Khoảng cách bên trong thẻ",
+      "min": 8,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Kiểu chữ"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Cỡ chữ tiêu đề",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "label": "Khoảng cách dưới tiêu đề",
+      "min": 16,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "product_title_size",
+      "label": "Cỡ chữ tên sản phẩm",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "label": "Cỡ chữ giá",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Nhãn giảm giá"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sale_badge",
+      "label": "Hiển thị nhãn giảm giá",
+      "default": true
+    },
+    {
+      "type": "inline_richtext",
+      "id": "sale_badge_text",
+      "label": "Nội dung nhãn",
+      "default": "Giảm giá"
+    },
+    {
+      "type": "color",
+      "id": "badge_background",
+      "label": "Màu nền nhãn",
+      "default": "#ff0000"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Màu chữ nhãn",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Hiển thị"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Hiển thị giá",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sản phẩm tương tự"
+    }
+  ]
+}
+{% endschema %}
