@@ -2,6 +2,7 @@
   Renders a header drawer menu triggered by the top details element.
 
   @param {object} linklist - The linklist to render
+  @param {object} [utility_linklist] - Optional secondary links rendered below the primary mobile navigation
   @param {string} [class] - Additional classes to add to the drawer
   @param {string} [data_header_drawer_type] - The type of header drawer to render
   @param {object} [block] - The block that can be used to provide settings
@@ -13,28 +14,7 @@
 
 {% liquid
   assign block_settings = block.settings
-  assign max_featured_items = 4
   assign image_border_radius = block_settings.image_border_radius
-
-  if block_settings.menu_style == 'featured_collections'
-    assign ratio = block_settings.featured_collections_aspect_ratio
-  elsif block_settings.menu_style == 'featured_products'
-    assign ratio = block_settings.featured_products_aspect_ratio
-  endif
-
-  ##
-  # We only eager load heavy elements of the page when rendering this template
-  # through the Section Rendering API.
-  #
-  # This keeps the initial render lightweight, minimizing the impact on TTFB.
-  # The second render then refreshes the page with additional content.
-  #
-  # At the moment, we check if the Section Rendering API is being used by
-  # checking if section.index is blank.
-  assign eager_loading = false
-  if section.index == blank
-    assign eager_loading = true
-  endif
 
   if block_settings.background_color != blank or block_settings.text_color != blank
     render 'contrast-override', background_color: block_settings.background_color, text_color: block_settings.text_color, section_id: block.id
@@ -504,58 +484,6 @@
                             </li>
                           {%- endfor -%}
                         </ul>
-                        {% liquid
-                          if eager_loading
-                            if block_settings.menu_style == 'featured_collections'
-                              assign featured_collections = link.links | where: 'type', 'collection_link'
-                            endif
-
-                            if block_settings.menu_style == 'featured_products'
-                              assign collection_linklist = link.links | where: 'type', 'collection_link' | first
-                              assign featured_products_collection = collection_linklist.object
-                            endif
-                          else
-                            assign featured_collections = null | sort
-                            assign featured_products_collection = null | sort
-                          endif
-                        -%}
-
-                        {% if featured_collections.size > 0 or featured_products_collection.products_count > 0 %}
-                          <div
-                            class="menu-drawer__featured-content menu-drawer__featured-content--childlist"
-                            style="--menu-drawer-animation-index: {{ linklist.links.size | plus: 1 }};"
-                          >
-                            <ul class="menu-drawer__featured-content-list list-unstyled">
-                              {% if featured_collections.size > 0 %}
-                                {%- for collection in featured_collections limit: max_featured_items -%}
-                                  <li class="menu-drawer__featured-content-list-item menu-drawer__featured-content-list-item--collection">
-                                    {% render 'resource-card',
-                                      resource: collection.object,
-                                      resource_type: 'collection',
-                                      style: 'overlay',
-                                      image_aspect_ratio: ratio,
-                                      image_sizes: 'auto, 400px'
-                                    %}
-                                  </li>
-                                {%- endfor -%}
-                              {% else %}
-                                {% paginate featured_products_collection.products by max_featured_items %}
-                                  {%- for product in featured_products_collection.products limit: max_featured_items -%}
-                                    <li class="menu-drawer__featured-content-list-item menu-drawer__featured-content-list-item--product">
-                                      {% render 'resource-card',
-                                        resource: product,
-                                        resource_type: 'product',
-                                        image_aspect_ratio: ratio,
-                                        image_sizes: 'auto, 400px',
-                                        product_view_context: 'dialog'
-                                      %}
-                                    </li>
-                                  {%- endfor -%}
-                                {% endpaginate %}
-                              {% endif %}
-                            </ul>
-                          </div>
-                        {% endif %}
                       </div>
                     </div>
                   </details>
@@ -583,6 +511,59 @@
         class="menu-drawer__utility-links menu-drawer__animated-element"
         style="--menu-drawer-animation-index: {{ linklist.links.size }};"
       >
+        {% if utility_linklist != blank and utility_linklist.links.size > 0 %}
+          <nav
+            class="menu-drawer__utility-navigation"
+            aria-label="Helpful links"
+            style="
+              {%- render 'menu-font-styles', settings: block_settings, menu_type: 'drawer' %}
+              {%- render 'submenu-font-styles', settings: block_settings %}
+            "
+          >
+            <ul class="menu-drawer__menu menu-drawer__utility-menu list-unstyled" role="list">
+              {% for utility_link in utility_linklist.links %}
+                <li{% if utility_link.links != blank %} class="menu-drawer__utility-item--has-children"{% endif %}>
+                  {% if utility_link.links == blank %}
+                    <a
+                      class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__utility-link focus-inset"
+                      href="{{ utility_link.url }}"
+                      {% if utility_link.current %}
+                        aria-current="page"
+                      {% endif %}
+                    >
+                      {{- utility_link.title | escape -}}
+                    </a>
+                  {% else %}
+                    <details class="menu-drawer__utility-details">
+                      <summary class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__utility-link focus-inset">
+                        <span>{{ utility_link.title | escape }}</span>
+                        <span class="svg-wrapper menu-drawer__utility-caret" aria-hidden="true">
+                          {{- 'icon-caret.svg' | inline_asset_content -}}
+                        </span>
+                      </summary>
+                      <ul class="menu-drawer__utility-submenu list-unstyled" role="list">
+                        {% for child_link in utility_link.links %}
+                          <li>
+                            <a
+                              class="menu-drawer__utility-sublink focus-inset"
+                              href="{{ child_link.url }}"
+                              {% if child_link.current %}
+                                aria-current="page"
+                              {% endif %}
+                            >
+                              {{- child_link.title | escape -}}
+                            </a>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    </details>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </nav>
+        {% endif %}
+
         {% liquid
           assign show_language = section.settings.show_language
           if localization.available_languages.size <= 1
@@ -709,60 +690,6 @@
         {%- endif -%}
       </div>
 
-      {% liquid
-        if block_settings.menu_style == 'featured_collections'
-          assign top_level_featured_collections = linklist.links | where: 'type', 'collection_link'
-        endif
-
-        if eager_loading and block_settings.menu_style == 'featured_products'
-          for link in linklist.links
-            if link.type == 'collection_link'
-              assign collection_linklist = link
-              assign top_level_featured_products_collection = collection_linklist.object
-              break
-            elsif link.type == 'catalog_link' or link.type == 'collections_link'
-              assign top_level_featured_products_collection = collections.all
-              break
-            endif
-          endfor
-        endif
-      -%}
-      {% if top_level_featured_collections.size > 0 or top_level_featured_products_collection.products_count > 0 %}
-        <div
-          class="menu-drawer__featured-content"
-          style="--menu-drawer-animation-index: {{ linklist.links.size | plus: 1 }};"
-        >
-          <ul class="menu-drawer__featured-content-list menu-drawer__animated-element list-unstyled">
-            {% if top_level_featured_collections.size > 0 %}
-              {%- for collection in top_level_featured_collections limit: max_featured_items -%}
-                <li class="menu-drawer__featured-content-list-item menu-drawer__featured-content-list-item--collection">
-                  {% render 'resource-card',
-                    resource: collection.object,
-                    resource_type: 'collection',
-                    style: 'overlay',
-                    image_aspect_ratio: ratio,
-                    image_sizes: 'auto, 400px'
-                  %}
-                </li>
-              {%- endfor -%}
-            {% elsif top_level_featured_products_collection.products_count > 0 %}
-              {% paginate top_level_featured_products_collection.products by max_featured_items %}
-                {%- for product in top_level_featured_products_collection.products limit: max_featured_items -%}
-                  <li class="menu-drawer__featured-content-list-item menu-drawer__featured-content-list-item--product">
-                    {% render 'resource-card',
-                      resource: product,
-                      resource_type: 'product',
-                      image_aspect_ratio: ratio,
-                      image_sizes: 'auto, 400px',
-                      product_view_context: 'dialog'
-                    %}
-                  </li>
-                {%- endfor -%}
-              {% endpaginate %}
-            {% endif %}
-          </ul>
-        </div>
-      {% endif %}
     </div>
     <div
       class="menu-drawer__backdrop"
@@ -788,42 +715,6 @@
     margin: auto;
     width: var(--icon-size-xs);
     height: var(--icon-size-xs);
-  }
-
-  .menu-drawer__featured-content {
-    z-index: var(--layer-base);
-    container-type: inline-size;
-  }
-
-  .menu-drawer__featured-content--childlist {
-    z-index: var(--layer-flat);
-  }
-
-  .menu-drawer__featured-content-list {
-    display: flex;
-    gap: 1em;
-    overflow-x: auto;
-    padding-block-end: var(--padding-lg);
-  }
-
-  .menu-drawer__featured-content-list-item {
-    flex: 0 0 auto;
-  }
-
-  .menu-drawer__featured-content-list-item--product {
-    width: 35cqi;
-  }
-
-  .menu-drawer__featured-content-list-item--collection img.resource-card__image {
-    width: 80cqi;
-  }
-
-  .menu-drawer__featured-content-list-item:first-child {
-    margin-inline-start: var(--margin-xl);
-  }
-
-  .menu-drawer__featured-content-list-item:last-child {
-    margin-inline-end: var(--margin-xl);
   }
 
   .menu-drawer__navigation {
@@ -868,6 +759,10 @@
     display: flex;
     border-right: var(--style-border-drawer);
     flex-direction: column;
+
+    @media screen and (max-width: 749px) {
+      width: min(88vw, 380px);
+    }
 
     @media screen and (min-width: 750px) {
       width: 25rem;
@@ -1170,6 +1065,27 @@
     padding: var(--padding-lg);
   }
 
+  .menu-drawer > .menu-drawer__close-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: var(--layer-raised);
+    width: 48px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+    padding: 13px;
+  }
+
+  .menu-drawer > .menu-drawer__close-button svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .menu-drawer > .menu-drawer__navigation {
+    padding-block-start: 56px;
+  }
+
   .menu-drawer__back-button {
     display: flex;
     width: 100%;
@@ -1246,10 +1162,105 @@
 
   .menu-drawer__utility-links {
     display: flex;
+    min-height: 0;
+    flex: 1 0 auto;
     flex-direction: column;
+    gap: var(--gap-md);
     padding: 0;
-    margin-block: auto var(--padding-sm);
-    margin-inline-start: var(--padding-xl);
+    margin: 0;
+  }
+
+  .menu-drawer__utility-navigation {
+    width: 100%;
+    padding-block-start: var(--padding-sm);
+    border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.12);
+  }
+
+  .menu-drawer__utility-menu {
+    display: block;
+    margin: 0;
+    padding-inline: var(--drawer-padding);
+  }
+
+  .menu-drawer__utility-link {
+    list-style: none;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .menu-drawer__utility-link::-webkit-details-marker {
+    display: none;
+  }
+
+  .menu-drawer__utility-link:hover,
+  .menu-drawer__utility-link:focus-visible {
+    text-decoration: none;
+  }
+
+  .menu-drawer__utility-caret {
+    width: 10px;
+    height: 10px;
+    flex: 0 0 auto;
+    transition: transform 0.22s ease;
+  }
+
+  .menu-drawer__utility-details[open] .menu-drawer__utility-caret {
+    transform: rotate(180deg);
+  }
+
+  .menu-drawer__utility-submenu {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2px;
+    margin: 0;
+    padding: 0 0 var(--padding-md) var(--padding-lg);
+  }
+
+  .menu-drawer__utility-details[open] > .menu-drawer__utility-submenu {
+    overflow: hidden;
+    animation: menu-drawer-utility-slide-down 0.24s ease-out both;
+  }
+
+  .menu-drawer__utility-sublink {
+    display: flex;
+    min-height: 44px;
+    align-items: center;
+    padding-inline: var(--padding-sm);
+    border-radius: 8px;
+    color: rgb(var(--color-foreground-rgb) / 0.78);
+    font-family: var(--menu-parent-font-family, var(--font-body--family));
+    font-size: 1.0625rem;
+    font-weight: var(--menu-parent-font-weight, 450);
+    line-height: 1.35;
+    text-decoration: none;
+    transition: color var(--animation-speed-fast) ease, background-color var(--animation-speed-fast) ease;
+  }
+
+  .menu-drawer__utility-sublink:hover,
+  .menu-drawer__utility-sublink:focus-visible {
+    color: var(--color-foreground);
+    background: rgb(var(--color-foreground-rgb) / 0.06);
+    text-decoration: none;
+  }
+
+  .menu-drawer__utility-links > .menu-drawer__localization {
+    align-self: flex-end;
+    margin-block-start: auto;
+    padding: var(--padding-lg) var(--drawer-padding) var(--padding-xl);
+  }
+
+  @keyframes menu-drawer-utility-slide-down {
+    from {
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+
+    to {
+      max-height: 360px;
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .menu-drawer__account {
@@ -1292,6 +1303,16 @@
       visibility: visible;
       opacity: 1;
       transform: translateX(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-drawer__utility-details[open] > .menu-drawer__utility-submenu {
+      animation: none;
+    }
+
+    .menu-drawer__utility-caret {
+      transition: none;
     }
   }
 

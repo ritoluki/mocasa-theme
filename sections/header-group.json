@@ -83,8 +83,10 @@
       },
       "settings": {
         "logo_position": "left",
+        "utility_menu": "main-menu",
         "menu_position": "right",
         "menu_row": "top",
+        "secondary_menu": "product-menu",
         "customer_account_menu": "customer-account-main-menu",
         "show_search": true,
         "search_position": "left",
@@ -102,8 +104,8 @@
         "divider_width": 0,
         "divider_size": "page-width",
         "divider_color": "",
-        "border_width": 0,
-        "bottom_border_color": "",
+        "border_width": 1,
+        "bottom_border_color": "#e6e9e6",
         "actions_display_style": "icon",
         "actions_font_size": "0.875rem",
         "actions_font": "body",
@@ -128,6 +130,7 @@
     },
     "blocks_Vep7T4": {
       "type": "_blocks",
+      "disabled": true,
       "name": "Header",
       "settings": {
         "content_direction": "column",
@@ -160,6 +163,7 @@
     },
     "custom_liquid_g4Xx6U": {
       "type": "custom-liquid",
+      "disabled": true,
       "name": "t:names.custom_liquid",
       "settings": {
         "custom_liquid": "<style>\n@media (min-width: 750px) {\n  /* Desktop navigation: reveal dropdowns while the parent item is hovered or focused. */\n  .menu-list__list-item:hover > .menu-list__submenu,\n  .menu-list__list-item:focus-within > .menu-list__submenu,\n  nav li:hover > ul,\n  nav li:focus-within > ul {\n    display: block;\n    visibility: visible;\n    opacity: 1;\n    pointer-events: auto;\n  }\n\n  .menu-list__list-item:hover > .menu-list__link,\n  .menu-list__list-item:focus-within > .menu-list__link,\n  nav li:hover > a,\n  nav li:focus-within > a {\n    position: relative;\n    z-index: 2;\n  }\n}\n</style>\n<script>\n(function () {\n  function enableHoverMenus() {\n    if (window.matchMedia('(max-width: 749px)').matches) return;\n\n    var items = document.querySelectorAll('header nav li, .menu-list__list-item');\n    items.forEach(function (item) {\n      var submenu = item.querySelector(':scope > .menu-list__submenu, :scope > ul');\n      if (!submenu || item.dataset.hoverMenuReady === 'true') return;\n      item.dataset.hoverMenuReady = 'true';\n\n      var trigger = item.querySelector(':scope > a, :scope > button, :scope > summary');\n      var open = function () {\n        item.classList.add('is-open', 'open', 'active');\n        submenu.classList.add('is-open', 'open', 'active');\n        if (trigger) trigger.setAttribute('aria-expanded', 'true');\n      };\n      var close = function () {\n        if (item.matches(':focus-within')) return;\n        item.classList.remove('is-open', 'open', 'active');\n        submenu.classList.remove('is-open', 'open', 'active');\n        if (trigger) trigger.setAttribute('aria-expanded', 'false');\n      };\n      item.addEventListener('mouseenter', open);\n      item.addEventListener('mouseleave', close);\n    });\n  }\n\n  document.addEventListener('DOMContentLoaded', enableHoverMenus);\n  window.addEventListener('resize', enableHoverMenus);\n})();\n</script>",
@@ -171,6 +175,7 @@
     },
     "divider_eLaTpE": {
       "type": "divider",
+      "disabled": true,
       "name": "t:names.divider_section",
       "settings": {
         "background_color": "",
@@ -186,6 +191,7 @@
     },
     "blocks_Lpdk9a": {
       "type": "_blocks",
+      "disabled": true,
       "blocks": {
         "ai_gen_block_a5b46b8_hF64mQ": {
           "type": "ai_gen_block_a5b46b8",
@@ -275,6 +281,7 @@
     },
     "1786263087d6ca74df": {
       "type": "_blocks",
+      "disabled": true,
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,
@@ -306,6 +313,7 @@
     },
     "divider_Btxmpj": {
       "type": "divider",
+      "disabled": true,
       "name": "t:names.divider_section",
       "settings": {
         "background_color": "",

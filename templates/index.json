@@ -11,30 +11,8 @@
   "sections": {
     "hero_jVaWmY": {
       "type": "hero",
-      "blocks": {
-        "button_H9gpTf": {
-          "type": "button",
-          "name": "t:names.button",
-          "settings": {
-            "label": "SHOP NOW",
-            "link": "shopify://collections/all",
-            "open_in_new_tab": false,
-            "style_class": "button-custom",
-            "custom_button_background": "#325335",
-            "custom_button_text": "{{ settings.color_palette.background }}",
-            "custom_button_border": "{{ settings.color_palette.color1 }}",
-            "link_text_color": "",
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "button_H9gpTf"
-      ],
+      "blocks": {},
+      "block_order": [],
       "name": "t:names.hero",
       "settings": {
         "media_type_1": "image",
@@ -42,10 +20,12 @@
         "media_type_2": "image",
         "stack_media_on_mobile": false,
         "custom_mobile_media": true,
+        "mobile_media_fit": "contain",
+        "mobile_media_background_color": "#ffffff",
         "media_type_1_mobile": "image",
         "image_1_mobile": "shopify://shop_images/Bia_Halloween_30a9674c-1e90-40a5-af68-b806c7956aaa.png",
         "media_type_2_mobile": "image",
-        "link": "",
+        "link": "shopify://collections/all",
         "open_in_new_tab": false,
         "content_direction": "column",
         "vertical_on_mobile": true,

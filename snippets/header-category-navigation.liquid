@@ -1,0 +1,247 @@
+{%- doc -%}
+  Renders the merchant-selected category navigation on desktop.
+
+  @param {object} menu - Shopify link list used for product categories
+{%- enddoc -%}
+
+{% if menu != blank and menu.links.size > 0 %}
+  <script
+    src="{{ 'header-disclosure-navigation.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+
+  <header-disclosure-navigation class="header-category-navigation">
+    <nav aria-label="Product categories">
+      <ul class="header-category-navigation__list list-unstyled" role="list">
+        {% for link in menu.links %}
+          <li class="header-category-navigation__item">
+            {% if link.links == blank %}
+              <a
+                class="header-category-navigation__link{% if link.active %} header-category-navigation__link--active{% endif %}"
+                href="{{ link.url }}"
+                {% if link.current %}
+                  aria-current="page"
+                {% endif %}
+              >
+                {{- link.title | escape -}}
+              </a>
+            {% else %}
+              <details class="header-category-navigation__details">
+                <summary class="header-category-navigation__link">
+                  <span>{{ link.title | escape }}</span>
+                  <span class="svg-wrapper header-category-navigation__caret" aria-hidden="true">
+                    {{- 'icon-caret.svg' | inline_asset_content -}}
+                  </span>
+                </summary>
+
+                <div class="header-category-navigation__dropdown">
+                  <div class="header-category-navigation__dropdown-inner">
+                    <ul class="header-category-navigation__grid list-unstyled" role="list">
+                      {% for child_link in link.links %}
+                        <li class="header-category-navigation__group">
+                          <a
+                            class="header-category-navigation__group-link"
+                            href="{{ child_link.url }}"
+                            {% if child_link.current %}
+                              aria-current="page"
+                            {% endif %}
+                          >
+                            {{- child_link.title | escape -}}
+                          </a>
+
+                          {% if child_link.links != blank %}
+                            <ul class="header-category-navigation__sublist list-unstyled" role="list">
+                              {% for grandchild_link in child_link.links %}
+                                <li>
+                                  <a
+                                    class="header-category-navigation__sublink"
+                                    href="{{ grandchild_link.url }}"
+                                    {% if grandchild_link.current %}
+                                      aria-current="page"
+                                    {% endif %}
+                                  >
+                                    {{- grandchild_link.title | escape -}}
+                                  </a>
+                                </li>
+                              {% endfor %}
+                            </ul>
+                          {% endif %}
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </details>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </header-disclosure-navigation>
+{% endif %}
+
+{% stylesheet %}
+  .header-category-navigation {
+    display: block;
+    width: 100%;
+    position: relative;
+  }
+
+  .header-category-navigation__list {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    min-height: 42px;
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+  }
+
+  .header-category-navigation__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .header-category-navigation__item {
+    position: static;
+    flex: 0 0 auto;
+  }
+
+  .header-category-navigation__details {
+    height: 100%;
+  }
+
+  .header-category-navigation__link {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-2xs);
+    padding-inline: clamp(10px, 1.4vw, 20px);
+    color: var(--color-foreground);
+    font-family: var(--font-body--family);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    list-style: none;
+    transition: color var(--animation-speed-fast) ease, background-color var(--animation-speed-fast) ease;
+  }
+
+  .header-category-navigation__link::-webkit-details-marker {
+    display: none;
+  }
+
+  .header-category-navigation__link:hover,
+  .header-category-navigation__link:focus-visible,
+  .header-category-navigation__link--active,
+  .header-category-navigation__details[open] > .header-category-navigation__link {
+    color: var(--color-foreground);
+    background: rgb(var(--color-foreground-rgb) / 0.06);
+    text-decoration: none;
+  }
+
+  .header-category-navigation__caret {
+    width: 10px;
+    height: 10px;
+    transition: transform var(--animation-speed-fast) ease;
+  }
+
+  .header-category-navigation__details[open] > .header-category-navigation__link .header-category-navigation__caret {
+    transform: rotate(180deg);
+  }
+
+  .header-category-navigation__dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    z-index: var(--layer-heightened);
+    display: block;
+    padding: var(--padding-xl);
+    border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.08);
+    border-bottom: 1px solid rgb(var(--color-foreground-rgb) / 0.08);
+    background: var(--color-background);
+    box-shadow: 0 18px 45px rgb(var(--color-shadow-rgb, 0 0 0) / 0.12);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity var(--animation-speed-fast) ease, transform var(--animation-speed-fast) ease,
+      visibility var(--animation-speed-fast) ease;
+  }
+
+  .header-category-navigation__details:not([open]) > .header-category-navigation__dropdown {
+    display: block;
+  }
+
+  .header-category-navigation__details[open] > .header-category-navigation__dropdown,
+  .header-category-navigation__details:hover > .header-category-navigation__dropdown,
+  .header-category-navigation__details:focus-within > .header-category-navigation__dropdown {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .header-category-navigation__dropdown-inner {
+    width: min(100%, var(--page-width));
+    margin-inline: auto;
+  }
+
+  .header-category-navigation__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: var(--gap-xl) var(--gap-2xl);
+    margin: 0;
+    padding: 0;
+  }
+
+  .header-category-navigation__group-link {
+    display: inline-block;
+    margin-block-end: var(--padding-xs);
+    color: var(--color-foreground);
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  .header-category-navigation__sublist {
+    display: grid;
+    gap: var(--gap-xs);
+    margin: 0;
+    padding: 0;
+  }
+
+  .header-category-navigation__sublink {
+    color: rgb(var(--color-foreground-rgb) / 0.72);
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+
+  .header-category-navigation__group-link:hover,
+  .header-category-navigation__group-link:focus-visible,
+  .header-category-navigation__sublink:hover,
+  .header-category-navigation__sublink:focus-visible {
+    color: var(--color-foreground);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  @media screen and (max-width: 749px) {
+    .header-category-navigation {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header-category-navigation__dropdown,
+    .header-category-navigation__caret,
+    .header-category-navigation__link {
+      transition: none;
+    }
+  }
+{% endstylesheet %}

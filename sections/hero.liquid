@@ -458,12 +458,14 @@
 
 <div
   id="Hero-{{ section.id }}"
-  class="hero{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}{% if section.blocks.size == 0 and section.settings.section_height == 'auto' %} hero--no-blocks-auto-height{% endif %}{% if section.settings.stack_media_on_mobile %} hero--stack-mobile{% endif %}"
+  class="hero{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}{% if section.blocks.size == 0 and section.settings.section_height == 'auto' %} hero--no-blocks-auto-height{% endif %}{% if section.settings.stack_media_on_mobile %} hero--stack-mobile{% endif %}{% if section.settings.mobile_media_fit == 'contain' %} hero--mobile-media-contain{% endif %}"
   style="
     --hero-border-style: {{ section.settings.border }};
     --hero-border-width: {{ section.settings.border_width }}px;
     --hero-border-opacity: {{ section.settings.border_opacity }}%;
     --blur-opacity: {{ section.settings.reflection_opacity | divided_by: 100.0 }};
+    --hero-mobile-media-aspect-ratio: {{ section.settings.image_1_mobile.aspect_ratio | default: section.settings.image_1.aspect_ratio | default: 1.777 }};
+    --hero-mobile-fit-background: {{ section.settings.mobile_media_background_color | default: '#ffffff' }};
     {% if section.settings.section_height == 'custom' %}
       --hero-min-height: {{ section.settings.section_height_custom }}svh;
     {% elsif section.settings.section_height == "full-screen" %}
@@ -660,6 +662,46 @@
     .hero--stack-mobile .hero__media-grid {
       grid-template-columns: 1fr;
       grid-template-rows: repeat(var(--hero-media-count-mobile, 1), calc(100% / var(--hero-media-count-mobile, 1)));
+    }
+
+    .hero--mobile-media-contain {
+      min-height: auto;
+      background: var(--hero-mobile-fit-background);
+    }
+
+    .hero--mobile-media-contain .hero__container {
+      display: flex;
+      min-height: auto;
+      flex-direction: column;
+      align-items: stretch;
+      padding-block: 0;
+      background: var(--hero-mobile-fit-background);
+    }
+
+    .hero--mobile-media-contain .hero__media-grid {
+      position: relative;
+      inset: auto;
+      width: 100%;
+      aspect-ratio: var(--hero-mobile-media-aspect-ratio);
+      flex: 0 0 auto;
+    }
+
+    .hero--mobile-media-contain .hero__media {
+      object-fit: contain;
+    }
+
+    .hero--mobile-media-contain .hero__content-wrapper {
+      width: 100%;
+      min-height: 88px;
+      flex: 0 0 auto;
+      align-items: center;
+      justify-content: center;
+      padding: var(--padding-md) var(--padding-lg) var(--padding-lg);
+      background: var(--hero-mobile-fit-background);
+    }
+
+    .hero--mobile-media-contain .hero__content-wrapper:not(:has(*)) {
+      display: none;
     }
   }
 
@@ -866,6 +908,30 @@
       "id": "custom_mobile_media",
       "label": "t:settings.custom_mobile_media",
       "default": false
+    },
+    {
+      "type": "select",
+      "id": "mobile_media_fit",
+      "label": "Mobile image fit",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cover"
+        },
+        {
+          "value": "contain",
+          "label": "Show full image as banner"
+        }
+      ],
+      "default": "cover",
+      "visible_if": "{{ section.settings.custom_mobile_media }}"
+    },
+    {
+      "type": "color",
+      "id": "mobile_media_background_color",
+      "label": "Mobile banner background",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.custom_mobile_media and section.settings.mobile_media_fit == 'contain' }}"
     },
     {
       "type": "header",
