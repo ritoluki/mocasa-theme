@@ -85,7 +85,7 @@
   endcapture
 
   capture menu
-    content_for 'block', type: '_header-menu', id: 'header-menu'
+    render 'header-utility-navigation', menu: section.settings.utility_menu
   endcapture
 
   capture drawer_menu
@@ -94,6 +94,10 @@
 
   capture navigation_bar
     content_for 'block', type: '_header-menu', id: 'header-menu', variant: 'navigation_bar', transparent: transparent
+  endcapture
+
+  capture category_navigation
+    render 'header-category-navigation', menu: section.settings.secondary_menu
   endcapture
 
   capture actions
@@ -462,6 +466,12 @@
       {{ navigation_bar }}
     </div>
   {% endif %}
+
+  {% if section.settings.secondary_menu != blank %}
+    <div class="header__row header__category-navigation-row section section--full-width-margin section--{{ section.settings.section_width }} mobile:hidden">
+      {{ category_navigation }}
+    </div>
+  {% endif %}
 </header-component>
 
 <script
@@ -741,6 +751,11 @@
       /* Only elevate the row when the submenu is open to avoid overlapping other elevated content */
       z-index: var(--layer-heightened);
     }
+  }
+
+  .header__category-navigation-row {
+    border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.08);
+    border-bottom: 1px solid rgb(var(--color-foreground-rgb) / 0.08);
   }
 
   .header__row--top:not(.divider--page-width),
@@ -1213,6 +1228,12 @@
       "content": "t:content.menu"
     },
     {
+      "type": "link_list",
+      "id": "utility_menu",
+      "label": "Utility menu",
+      "info": "Shown in the desktop header and below the category links in the mobile drawer."
+    },
+    {
       "type": "select",
       "id": "menu_position",
       "label": "t:settings.position",
@@ -1247,6 +1268,12 @@
         }
       ],
       "default": "top"
+    },
+    {
+      "type": "link_list",
+      "id": "secondary_menu",
+      "label": "Category menu",
+      "info": "Shown as a desktop category bar and as the primary menu inside the mobile drawer."
     },
     {
       "type": "header",
