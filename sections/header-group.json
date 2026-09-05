@@ -192,10 +192,10 @@
           "settings": {
             "menu": "product-menu",
             "nav_alignment": "center",
-            "nav_font_size": 16,
-            "nav_spacing": 25,
+            "nav_font_size": 15,
+            "nav_spacing": 15,
             "link_padding_vertical": 0,
-            "link_padding_horizontal": 12,
+            "link_padding_horizontal": 8,
             "background_color": "#ffffff",
             "text_color": "#325335",
             "text_hover_color": "#666666",

@@ -1,0 +1,210 @@
+{% comment %}
+  Section: Shop By Recipient / Interest
+  Cách dùng: đặt file này vào thư mục /sections/ của theme,
+  sau đó vào Online Store > Customize > Add section > Shop By Recipient
+{% endcomment %}
+
+<div class="shop-by-wrapper">
+
+  {% if section.blocks.size > 0 %}
+    {% assign has_pill = false %}
+    {% for block in section.blocks %}
+      {% if block.type == "pill" %}
+        {% assign has_pill = true %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  {% if has_pill %}
+  <div class="shop-by-pills-band" style="background: {{ section.settings.pills_bg_color }}; padding: 32px 20px; text-align: center;">
+    {% if section.settings.pills_heading != blank %}
+      <h2 style="font-size: 22px; font-weight: 700; margin: 0 0 20px;">{{ section.settings.pills_heading }}</h2>
+    {% endif %}
+
+    <div class="shop-by-pills" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-width: 1200px; margin: 0 auto;">
+      {% for block in section.blocks %}
+        {% if block.type == "pill" %}
+          <a href="{{ block.settings.link | default: '#' }}"
+             {{ block.shopify_attributes }}
+             style="display: inline-block;
+                    background: #fff;
+                    border: 1.5px solid #1a1a1a;
+                    border-radius: 999px;
+                    padding: 10px 22px;
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #1a1a1a;
+                    text-decoration: none;
+                    white-space: nowrap;">
+            {{ block.settings.label }}
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="shop-by-circles-band" style="background: {{ section.settings.circles_bg_color }}; padding: 40px 20px; text-align: center;">
+    {% if section.settings.circles_heading != blank %}
+      <h2 style="font-size: 22px; font-weight: 700; margin: 0 0 30px;">{{ section.settings.circles_heading }}</h2>
+    {% endif %}
+
+    <div class="shop-by-circles"
+         style="display: grid;
+                grid-template-columns: repeat({{ section.settings.circles_columns }}, 1fr);
+                gap: 24px;
+                max-width: 1400px;
+                margin: 0 auto;">
+      {% for block in section.blocks %}
+        {% if block.type == "circle" %}
+          <a href="{{ block.settings.link | default: '#' }}"
+             {{ block.shopify_attributes }}
+             style="text-decoration: none; color: inherit; display: block;">
+            <div class="shop-by-circle-img"
+                 style="width: 100%;
+                        aspect-ratio: 1/1;
+                        border-radius: 50%;
+                        overflow: hidden;
+                        background: #eee;">
+              {% if block.settings.image %}
+                <img src="{{ block.settings.image | image_url: width: 700 }}"
+                     alt="{{ block.settings.label | escape }}"
+                     loading="lazy"
+                     style="width: 100%; height: 100%; object-fit: cover; display: block;">
+              {% endif %}
+            </div>
+            <p style="margin-top: 16px; font-size: 16px; font-weight: 700;">{{ block.settings.label }}</p>
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+
+<style>
+  @media (max-width: 749px) {
+    .shop-by-pills { gap: 8px !important; }
+    .shop-by-pills a { font-size: 13px !important; padding: 8px 16px !important; }
+    .shop-by-circles {
+      grid-template-columns: repeat({{ section.settings.circles_columns_mobile }}, 1fr) !important;
+      gap: 16px !important;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Shop By Recipient",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Pills band (Who Are You Shopping For)"
+    },
+    {
+      "type": "text",
+      "id": "pills_heading",
+      "label": "Pills heading",
+      "default": "Who Are You Shopping For Today?"
+    },
+    {
+      "type": "color",
+      "id": "pills_bg_color",
+      "label": "Pills band background",
+      "default": "#fbead9"
+    },
+    {
+      "type": "header",
+      "content": "Circles band (What's Your Loved One Into)"
+    },
+    {
+      "type": "text",
+      "id": "circles_heading",
+      "label": "Circles heading",
+      "default": "What's Your Loved One Into?"
+    },
+    {
+      "type": "color",
+      "id": "circles_bg_color",
+      "label": "Circles band background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "circles_columns",
+      "label": "Circle columns (desktop)",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "circles_columns_mobile",
+      "label": "Circle columns (mobile)",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    }
+  ],
+  "blocks": [
+    {
+      "type": "pill",
+      "name": "Recipient pill",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Dad/ Grandpa"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (collection or page)"
+        }
+      ]
+    },
+    {
+      "type": "circle",
+      "name": "Interest circle",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Golf"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (collection or page)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop By Recipient",
+      "blocks": [
+        { "type": "pill", "settings": { "label": "Dad/ Grandpa" } },
+        { "type": "pill", "settings": { "label": "Mom/ Grandma" } },
+        { "type": "pill", "settings": { "label": "Couple" } },
+        { "type": "pill", "settings": { "label": "Kids & Baby" } },
+        { "type": "pill", "settings": { "label": "Pet Lover" } },
+        { "type": "pill", "settings": { "label": "For Fan" } },
+        { "type": "circle", "settings": { "label": "Golf" } },
+        { "type": "circle", "settings": { "label": "Reading" } },
+        { "type": "circle", "settings": { "label": "Pet Lover" } },
+        { "type": "circle", "settings": { "label": "Fishing" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
