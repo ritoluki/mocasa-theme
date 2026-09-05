@@ -278,14 +278,6 @@
     justify-content: var(--grid-area-alignment);
   }
 
-  .menu-list__list-item {
-    flex-shrink: 0;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    height: 100%;
-  }
-
   .menu-list__list-item[aria-hidden='true'] {
     visibility: hidden;
   }
@@ -372,7 +364,6 @@
   .overflow-menu::part(overflow) {
     --submenu-padding-block-start: var(--padding-3xl);
     --submenu-padding-block-end: var(--padding-3xl);
-    background-color: transparent;
   }
 
   .overflow-menu::part(overflow) {
@@ -392,7 +383,7 @@
   }
 
   .menu-list__list-item:is([slot='overflow']) {
-    --menu-top-level-font-color: var(--color-foreground);
+    --menu-top-level-font-size: var(--color-foreground);
     --menu-top-level-font-color-rgb: var(--color-foreground-rgb);
 
     display: contents;
@@ -427,13 +418,6 @@
 
   .header-menu {
     height: 100%;
-  }
-
-  .menu-list__submenu-inner {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
   }
 
   .mega-menu__link {
@@ -490,137 +474,105 @@
     border-radius: var(--menu-image-border-radius);
   }
 
-  .mega-menu__grid {
-    display: grid;
-    grid-template-columns: repeat(var(--menu-columns-tablet), minmax(0, 1fr));
-    gap: var(--menu-vertical-gap) var(--menu-horizontal-gap);
-    width: 100%;
-
-    @media screen and (min-width: 990px) {
-      grid-template-columns: repeat(var(--menu-columns-desktop), minmax(0, 1fr));
-    }
-  }
-
   .mega-menu__column {
     grid-column: span 1;
-  }
-
-  .mega-menu__content-list {
-    display: grid;
-    justify-content: end;
-    gap: var(--menu-vertical-gap) var(--menu-horizontal-gap);
-  }
-
-  .mega-menu__content-list--products {
-    grid-template-columns: repeat(var(--menu-content-columns-tablet), minmax(0, 1fr));
-
-    @media screen and (min-width: 990px) {
-      grid-template-columns: repeat(var(--menu-content-columns-desktop), minmax(0, 1fr));
-    }
-  }
-
-  .mega-menu__content-list--collections {
-    grid-template-columns: repeat(var(--menu-content-columns-tablet), minmax(0, 300px));
-
-    @media screen and (min-width: 990px) {
-      grid-template-columns: repeat(var(--menu-content-columns-desktop), minmax(0, 300px));
-    }
-  }
-
-  .mega-menu__list {
-    display: grid;
-    grid-template-columns: subgrid;
-    grid-column: span var(--menu-columns-tablet);
-    gap: var(--menu-vertical-gap) var(--menu-horizontal-gap);
-
-    @media screen and (min-width: 990px) {
-      grid-column: span var(--menu-columns-desktop);
-    }
-  }
-
-  .mega-menu__content {
-    grid-column: span var(--menu-content-columns-tablet) / -1;
-
-    @media screen and (min-width: 990px) {
-      grid-column: span var(--menu-content-columns-desktop) / -1;
-    }
   }
 
   .mega-menu__submenu {
     display: contents;
   }
 
-  /* === BỘ CSS NỔI VÀ ĐÈ LÊN HÀNG/BANNER PHÍA DƯỚI === */
+  /* === DROPDOWN ĐỔ XUỐNG NGAY DƯỚI TỪNG MỤC MENU === */
 
-  /* 1. Mở rộng khung chứa của Header để không bị xén (cut-off) menu */
-  .shopify-section-header,
   header-menu,
   .header-menu,
-  .header-menu__inner,
-  nav.menu-list {
+  .shopify-section-header,
+  header {
     position: relative !important;
     overflow: visible !important;
-    z-index: 9999 !important;
+    z-index: 2147483647 !important;
   }
 
+  /* 1. Neo menu con theo vị trí chính xác của nút cha */
   .menu-list__list-item {
     position: relative !important;
+    flex-shrink: 0;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    height: 100%;
   }
 
-  /* 2. Cấu hình Submenu nổi hoàn toàn (Overlay / Position Absolute) */
-  .menu-list__submenu,
-  .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu {
+  /* 2. Định dạng khung menu con đổ xuống ngay bên dưới */
+  .menu-list__submenu {
     position: absolute !important;
     top: 100% !important;
     left: 0 !important;
+    right: auto !important;
     width: max-content !important;
-    min-width: 100% !important;
-    z-index: 999999 !important; /* Lớp cao nhất để đè lên mọi hàng/banner phía dưới */
-    margin-top: 0 !important;
-    background-color: #ffffff !important;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15) !important;
+    min-width: 180px !important;
+    padding: 8px !important;
     
-    /* Trạng thái ẩn mặc định */
+    background-color: var(--color-submenu, #ffffff) !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12) !important;
+
     visibility: hidden !important;
     opacity: 0 !important;
     pointer-events: none !important;
-    transition: opacity 0.2s ease, visibility 0.2s ease !important;
+    transform: translateY(8px) !important;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s !important;
   }
 
-  /* 3. Chỉ hiển thị và đè lên hàng dưới khi rê chuột vào (Hover) */
+  .menu-list__submenu-inner {
+    position: relative !important;
+    display: block !important;
+    padding: 0 !important;
+  }
+
+  /* 3. Chuyển từ Layout Grid dạng bảng sang Dọc */
+  .mega-menu,
+  .mega-menu__grid,
+  .mega-menu__list,
+  .mega-menu__content-list {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 2px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* 4. Định dạng hiệu ứng hover vào từng đường link con */
+  .mega-menu__link,
+  .menu-list__submenu a {
+    display: block !important;
+    width: 100% !important;
+    padding: 8px 12px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    color: #333333 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease !important;
+  }
+
+  .mega-menu__link:hover,
+  .menu-list__submenu a:hover {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+    color: #000000 !important;
+    transform: translateX(3px) !important;
+  }
+
+  /* 5. Hiển thị menu khi hover chuột vào mục chính */
   .menu-list__list-item:hover > .menu-list__submenu,
   .menu-list__list-item:focus-within > .menu-list__submenu,
-  .menu-list__submenu:hover {
+  .menu-list__link[aria-expanded='true'] + .menu-list__submenu {
     visibility: visible !important;
     opacity: 1 !important;
     pointer-events: auto !important;
-  }
-
-  /* 4. Dàn trang ngang cho nội dung Mega Menu */
-  .menu-list__submenu-inner,
-  .mega-menu__grid {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: flex-start !important;
-    gap: 30px !important;
-    padding: 20px 24px !important;
-    transform: none !important;
-    width: 100% !important;
-  }
-
-  /* 5. Khóa chữ trên 1 dòng (chống xuống dòng / co dẹp) */
-  .mega-menu__link,
-  .menu-list__submenu a,
-  .mega-menu__list a,
-  .mega-menu__link--parent {
-    white-space: nowrap !important;
-  }
-
-  .mega-menu__column,
-  .mega-menu__list,
-  .menu-list__submenu .mega-menu__grid > * {
-    min-width: 160px !important;
-    flex: 1 1 auto !important;
+    transform: translateY(0) !important;
   }
 {% endstylesheet %}
 
@@ -861,7 +813,7 @@
     {
       "type": "checkbox",
       "id": "drawer_accordion_expand_first",
-      "label": "t:settings.expand_first_group",
+      "label": "Expand first group",
       "default": false,
       "visible_if": "{{ block.settings.drawer_accordion == true }}"
     },

@@ -1,0 +1,196 @@
+{% comment %}
+  Section: New Arrivals
+  Cách dùng: đặt file này vào thư mục /sections/ của theme,
+  sau đó vào Online Store > Customize > Add section > New Arrivals
+{% endcomment %}
+
+<div class="new-arrivals-section" style="padding: 40px 20px; text-align: center;">
+  {% if section.settings.heading != blank %}
+    <h2 class="new-arrivals-heading" style="font-size: 24px; font-weight: 700; margin-bottom: 30px;">
+      {{ section.settings.heading }}
+    </h2>
+  {% endif %}
+
+  <div class="new-arrivals-grid"
+       style="display: grid;
+              grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+              gap: 24px;
+              max-width: 1400px;
+              margin: 0 auto;
+              text-align: left;">
+    {% for block in section.blocks %}
+      {% assign product = block.settings.product %}
+      <div class="new-arrivals-item" {{ block.shopify_attributes }}>
+        <a href="{{ product.url | default: '#' }}" style="text-decoration: none; color: inherit;">
+          <div class="new-arrivals-image-wrap" style="position: relative; border-radius: 8px; overflow: hidden;">
+            {% if product.featured_image %}
+              <img src="{{ product.featured_image | image_url: width: 600 }}"
+                   alt="{{ product.featured_image.alt | escape }}"
+                   loading="lazy"
+                   style="width: 100%; height: auto; display: block;">
+            {% elsif block.settings.image %}
+              <img src="{{ block.settings.image | image_url: width: 600 }}"
+                   alt="{{ block.settings.image.alt | escape }}"
+                   loading="lazy"
+                   style="width: 100%; height: auto; display: block;">
+            {% else %}
+              <div style="width: 100%; aspect-ratio: 1/1; background: #f2f2f2;"></div>
+            {% endif %}
+          </div>
+
+          <div class="new-arrivals-info" style="margin-top: 12px;">
+            {% if block.settings.show_badge %}
+              <span class="new-arrivals-badge"
+                    style="display: inline-block;
+                           background: #d9f2d9;
+                           color: #1a7a1a;
+                           font-size: 11px;
+                           font-weight: 700;
+                           padding: 2px 8px;
+                           border-radius: 4px;
+                           margin-bottom: 6px;">
+                New!
+              </span>
+            {% endif %}
+
+            <p class="new-arrivals-title" style="font-size: 14px; font-weight: 600; margin: 0 0 4px; line-height: 1.3;">
+              {{ product.title | default: block.settings.title }}
+            </p>
+
+            {% if block.settings.product_type != blank %}
+              <p class="new-arrivals-type" style="font-size: 13px; color: #767676; margin: 0 0 6px;">
+                {{ block.settings.product_type }}
+              </p>
+            {% endif %}
+
+            <p class="new-arrivals-price" style="font-size: 15px; font-weight: 700; color: #325335; margin: 0;">
+              {% if product %}
+                {{ product.price | money_with_currency }}
+              {% else %}
+                {{ block.settings.price }}
+              {% endif %}
+            </p>
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if section.settings.button_label != blank %}
+    <div style="margin-top: 32px;">
+      <a href="{{ section.settings.button_link | default: '#' }}"
+         style="display: inline-block;
+                background: #325335;
+                color: #fff;
+                font-weight: 700;
+                font-size: 14px;
+                padding: 14px 32px;
+                border-radius: 4px;
+                text-decoration: none;
+                letter-spacing: 0.5px;">
+        {{ section.settings.button_label }} &gt;
+      </a>
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  @media (max-width: 749px) {
+    .new-arrivals-grid {
+      grid-template-columns: repeat({{ section.settings.columns_mobile }}, 1fr) !important;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "New Arrivals",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Discover New Arrivals"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns (desktop)",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "label": "Columns (mobile)",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Browse more"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Product item",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product (pulls image, title, price automatically)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom image (used only if no product is selected)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Custom title (used only if no product is selected)"
+        },
+        {
+          "type": "text",
+          "id": "product_type",
+          "label": "Product type label (e.g. Ornament, Acrylic Plaque)"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Custom price (used only if no product is selected)"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_badge",
+          "label": "Show \"New!\" badge",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "New Arrivals",
+      "blocks": [
+        { "type": "item" },
+        { "type": "item" },
+        { "type": "item" },
+        { "type": "item" }
+      ]
+    }
+  ]
+}
+{% endschema %}

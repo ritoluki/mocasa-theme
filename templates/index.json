@@ -38,12 +38,12 @@
       "name": "t:names.hero",
       "settings": {
         "media_type_1": "image",
-        "image_1": "shopify://shop_images/Bia.png",
+        "image_1": "shopify://shop_images/Bia_Halloween_9df3b573-6c5e-40b2-bf45-bce59272fc1b.png",
         "media_type_2": "image",
         "stack_media_on_mobile": false,
         "custom_mobile_media": true,
         "media_type_1_mobile": "image",
-        "image_1_mobile": "shopify://shop_images/Bia_mobile.png",
+        "image_1_mobile": "shopify://shop_images/Bia_Halloween_30a9674c-1e90-40a5-af68-b806c7956aaa.png",
         "media_type_2_mobile": "image",
         "link": "",
         "open_in_new_tab": false,
@@ -54,19 +54,19 @@
         "align_baseline": true,
         "horizontal_alignment_flex_direction_column": "center",
         "vertical_alignment_flex_direction_column": "flex-end",
-        "gap": 24,
-        "section_width": "page-width",
-        "section_height": "medium",
-        "section_height_custom": 50,
+        "gap": 40,
+        "section_width": "full-width",
+        "section_height": "custom",
+        "section_height_custom": 80,
         "background_color": "rgba(0,0,0,0)",
         "toggle_overlay": true,
-        "overlay_color": "#12121266",
+        "overlay_color": "rgba(0,0,0,0)",
         "overlay_style": "solid",
         "gradient_direction": "to bottom",
         "blurred_reflection": false,
         "reflection_opacity": 75,
         "padding-block-start": 100,
-        "padding-block-end": 72
+        "padding-block-end": 40
       }
     },
     "collection_list_PAJiii": {
@@ -439,11 +439,471 @@
         "padding-block-start": 12,
         "padding-block-end": 48
       }
+    },
+    "shop_by_recipient_J9Hitw": {
+      "type": "shop-by-recipient",
+      "blocks": {
+        "pill_ieVmQd": {
+          "type": "pill",
+          "settings": {
+            "label": "Dad/ Grandpa",
+            "link": "shopify://collections/gift-for-dad"
+          }
+        },
+        "pill_mMDgHq": {
+          "type": "pill",
+          "settings": {
+            "label": "Mom/ Grandma",
+            "link": "shopify://collections/gift-for-mom"
+          }
+        },
+        "pill_fJtT8g": {
+          "type": "pill",
+          "settings": {
+            "label": "Couple",
+            "link": "shopify://collections/gift-for-couple"
+          }
+        },
+        "pill_xXwiLJ": {
+          "type": "pill",
+          "settings": {
+            "label": "Kids & Baby",
+            "link": "shopify://collections/gift-for-kids"
+          }
+        },
+        "pill_gqWNHz": {
+          "type": "pill",
+          "settings": {
+            "label": "Pet Lover",
+            "link": "shopify://collections/gift-for-pet-lovers"
+          }
+        },
+        "pill_nbixYp": {
+          "type": "pill",
+          "settings": {
+            "label": "For Fan",
+            "link": "shopify://collections/gifts-for-fan"
+          }
+        },
+        "circle_DpmhYd": {
+          "type": "circle",
+          "settings": {
+            "image": "shopify://shop_images/1787806592312_1555796589770767643_1555796589770767643_09283de784fd2194cd6b5084239e6592.jpg",
+            "label": "Golf",
+            "link": "shopify://collections/golf"
+          }
+        },
+        "circle_6qmLRf": {
+          "type": "circle",
+          "settings": {
+            "image": "shopify://shop_images/1787805634909_1555796589770767643_1555796589770767643_5a387466f5f60f041ce5b913fc0de9fc.jpg",
+            "label": "Reading",
+            "link": "shopify://collections/reading-gifts"
+          }
+        },
+        "circle_WDMGAa": {
+          "type": "circle",
+          "settings": {
+            "image": "shopify://shop_images/1787807310960_1555796589770767643_1555796589770767643_5fd61bf5afa96995161acea6d0615146.jpg",
+            "label": "Pet Lover",
+            "link": "shopify://collections/gift-for-pet-lovers"
+          }
+        },
+        "circle_DCJyxY": {
+          "type": "circle",
+          "settings": {
+            "image": "shopify://shop_images/1787807011843_1555796589770767643_1555796589770767643_3c04292db13b0f807ad09f76a4604b30.jpg",
+            "label": "Fishing",
+            "link": "shopify://collections/fishing"
+          }
+        }
+      },
+      "block_order": [
+        "pill_ieVmQd",
+        "pill_mMDgHq",
+        "pill_fJtT8g",
+        "pill_xXwiLJ",
+        "pill_gqWNHz",
+        "pill_nbixYp",
+        "circle_DpmhYd",
+        "circle_6qmLRf",
+        "circle_WDMGAa",
+        "circle_DCJyxY"
+      ],
+      "name": "Shop By Recipient",
+      "settings": {
+        "pills_heading": "Who Are You Shopping For Today?",
+        "pills_bg_color": "#c1d8c3",
+        "circles_heading": "What's Your Loved One Into?",
+        "circles_bg_color": "#ffffff",
+        "circles_columns": 4,
+        "circles_columns_mobile": 2
+      }
+    },
+    "interest_carousel_GPLPY9": {
+      "type": "interest-carousel",
+      "blocks": {
+        "card_bpALiC": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/Back_to_school_bia_mobile.png",
+            "label": "Back To School",
+            "link": "shopify://collections/back-to-school"
+          }
+        },
+        "card_XJ3Ptr": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/Happy_Father_s_Day_Poster.png",
+            "label": "Father's Day",
+            "link": "shopify://collections/gift-for-dad"
+          }
+        },
+        "card_KQgiCQ": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/Sale_Poster.png",
+            "label": "Sale",
+            "link": "shopify://collections/best-selling"
+          }
+        },
+        "card_pxCym4": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/Graduation_Poster.png",
+            "label": "Graduation",
+            "link": "shopify://collections/graduation"
+          }
+        },
+        "card_TLk6yd": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/Mother_s_Day_Post.png",
+            "label": "Mother's Day",
+            "link": "shopify://collections/gift-for-mom"
+          }
+        },
+        "card_ENbY8H": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/Christmas_Poster.png",
+            "label": "Christmas",
+            "link": "shopify://collections/christmas"
+          }
+        }
+      },
+      "block_order": [
+        "card_bpALiC",
+        "card_XJ3Ptr",
+        "card_KQgiCQ",
+        "card_pxCym4",
+        "card_TLk6yd",
+        "card_ENbY8H"
+      ],
+      "name": "Interest Carousel",
+      "settings": {
+        "heading": "What's your loved one into?",
+        "card_width": 280
+      }
+    },
+    "shop_by_categories_gKGm3V": {
+      "type": "shop-by-categories",
+      "blocks": {
+        "category_rLC8DN": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/MK2_8cdf30ed-c104-479c-96ce-7feabde3ffef.jpg",
+            "label": "Cap",
+            "link": "shopify://collections/hats-and-caps"
+          }
+        },
+        "category_QUzQn8": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/MK3_cf5f2f5b-339b-415f-9860-a74cb3cea7c0.jpg",
+            "label": "Shirt",
+            "link": "shopify://collections/all-over-shirt"
+          }
+        },
+        "category_yJwLrp": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/MK1_6da52184-1b7f-4ef7-8849-4232db0f88d7.jpg",
+            "label": "Mug",
+            "link": "shopify://collections/mug"
+          }
+        },
+        "category_gA8F3J": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/MK1_2.jpg",
+            "label": "Leggings",
+            "link": "shopify://collections/leggings"
+          }
+        }
+      },
+      "block_order": [
+        "category_rLC8DN",
+        "category_QUzQn8",
+        "category_yJwLrp",
+        "category_gA8F3J"
+      ],
+      "name": "Shop By Categories",
+      "settings": {
+        "heading": "Shop By Categories",
+        "columns_desktop": 4,
+        "columns_mobile": 2
+      }
+    },
+    "recipient_carousel_TFm79A": {
+      "type": "recipient-carousel",
+      "blocks": {
+        "circle_yKmKpr": {
+          "type": "circle",
+          "settings": {
+            "image": "shopify://shop_images/1.png",
+            "label": "For Couple",
+            "link": "shopify://collections/gift-for-couple",
+            "bg_color": ""
+          }
+        },
+        "circle_pHLdDV": {
+          "type": "circle",
+          "settings": {
+            "image": "shopify://shop_images/2.png",
+            "label": "For Mom",
+            "link": "shopify://collections/gift-for-mom",
+            "bg_color": ""
+          }
+        },
+        "circle_FdLwcj": {
+          "type": "circle",
+          "settings": {
+            "image": "shopify://shop_images/3.png",
+            "label": "For Grandma",
+            "link": "shopify://collections/gifts-for-grandma",
+            "bg_color": ""
+          }
+        },
+        "circle_zcceNp": {
+          "type": "circle",
+          "settings": {
+            "image": "shopify://shop_images/4.png",
+            "label": "For Dad",
+            "link": "shopify://collections/gift-for-dad",
+            "bg_color": ""
+          }
+        },
+        "circle_ckeKbe": {
+          "type": "circle",
+          "settings": {
+            "image": "shopify://shop_images/5.png",
+            "label": "Pet Lovers",
+            "link": "shopify://collections/gift-for-pet-lovers",
+            "bg_color": ""
+          }
+        },
+        "circle_E43BYn": {
+          "type": "circle",
+          "settings": {
+            "image": "shopify://shop_images/6.png",
+            "label": "For Family",
+            "link": "shopify://collections/gift-for-family",
+            "bg_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "circle_yKmKpr",
+        "circle_pHLdDV",
+        "circle_FdLwcj",
+        "circle_zcceNp",
+        "circle_ckeKbe",
+        "circle_E43BYn"
+      ],
+      "name": "Recipient Carousel",
+      "settings": {
+        "heading": "Shop By Recipient",
+        "circle_size": 240,
+        "default_bg_color": "#fbe4d8"
+      }
+    },
+    "new_arrivals_C88EwB": {
+      "type": "new-arrivals",
+      "blocks": {
+        "item_AYP84p": {
+          "type": "item",
+          "settings": {
+            "product": "gothic-couple-simply-meant-to-be-halloween-gifts-for-couple-personalized-cauldron-coffee-mug-qt6082401",
+            "title": "",
+            "product_type": "",
+            "price": "",
+            "show_badge": true
+          }
+        },
+        "item_GNPHkr": {
+          "type": "item",
+          "settings": {
+            "product": "charming-it-s-just-a-bunch-of-three-witches-halloween-gifts-for-her-personalized-quilt-witch-hat-hn6082301",
+            "title": "",
+            "product_type": "",
+            "price": "",
+            "show_badge": true
+          }
+        },
+        "item_w8tfwi": {
+          "type": "item",
+          "settings": {
+            "product": "creepy-gothic-halloween-gift-for-horror-lovers-personalized-coffee-mug-qt6081801",
+            "title": "",
+            "product_type": "",
+            "price": "",
+            "show_badge": true
+          }
+        },
+        "item_HnapzR": {
+          "type": "item",
+          "settings": {
+            "product": "this-a-belongs-to-him-naughty-style-gift-for-her-personalized-leggings-hg6082301",
+            "title": "",
+            "product_type": "",
+            "price": "",
+            "show_badge": true
+          }
+        },
+        "item_GeWtPx": {
+          "type": "item",
+          "settings": {
+            "product": "three-spooky-sisters-horror-style-halloween-gifts-for-her-personalized-cauldron-coffee-mug-hg6082601",
+            "title": "",
+            "product_type": "",
+            "price": "",
+            "show_badge": true
+          }
+        },
+        "item_7CL3tk": {
+          "type": "item",
+          "settings": {
+            "product": "whimsical-fantasy-three-witches-halloween-gifts-for-her-personalized-acrylic-light-box-qt6082303",
+            "title": "",
+            "product_type": "",
+            "price": "",
+            "show_badge": true
+          }
+        }
+      },
+      "block_order": [
+        "item_AYP84p",
+        "item_GNPHkr",
+        "item_w8tfwi",
+        "item_HnapzR",
+        "item_GeWtPx",
+        "item_7CL3tk"
+      ],
+      "name": "New Arrivals",
+      "settings": {
+        "heading": "Discover New Arrivals",
+        "columns_desktop": 6,
+        "columns_mobile": 2,
+        "button_label": "Browse more",
+        "button_link": "shopify://collections/new-arrivals"
+      }
+    },
+    "customer_photos_DGjNaU": {
+      "type": "customer-photos",
+      "blocks": {
+        "photo_UXK8KG": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/wood_sign_feedback.webp",
+            "alt": "",
+            "link": ""
+          }
+        },
+        "photo_K9xRQ8": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/shirt_dad_feedback.webp",
+            "alt": "",
+            "link": ""
+          }
+        },
+        "photo_XmrmJB": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/grandma_shirt_feedback.webp",
+            "alt": "",
+            "link": ""
+          }
+        },
+        "photo_Yrdx3Y": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/blanket_feedback.webp",
+            "alt": "",
+            "link": ""
+          }
+        },
+        "photo_bFgwaP": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/ornament.webp",
+            "alt": "",
+            "link": ""
+          }
+        },
+        "photo_rPK93f": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/cauldron_mug_feedback.webp",
+            "alt": "",
+            "link": ""
+          }
+        },
+        "photo_iEYGez": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/cauldron_mug_witch_feedback.png",
+            "alt": "",
+            "link": ""
+          }
+        },
+        "photo_HC6cFa": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/kid_backpack_feedback.webp",
+            "alt": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "photo_UXK8KG",
+        "photo_K9xRQ8",
+        "photo_XmrmJB",
+        "photo_Yrdx3Y",
+        "photo_bFgwaP",
+        "photo_rPK93f",
+        "photo_iEYGez",
+        "photo_HC6cFa"
+      ],
+      "name": "Customer Photos",
+      "settings": {
+        "heading": "Let Customers Speak For Us",
+        "columns_desktop": 4,
+        "columns_mobile": 2
+      }
     }
   },
   "order": [
     "hero_jVaWmY",
     "collection_list_PAJiii",
-    "product_list_fa6P9H"
+    "product_list_fa6P9H",
+    "shop_by_recipient_J9Hitw",
+    "interest_carousel_GPLPY9",
+    "shop_by_categories_gKGm3V",
+    "recipient_carousel_TFm79A",
+    "new_arrivals_C88EwB",
+    "customer_photos_DGjNaU"
   ]
 }
